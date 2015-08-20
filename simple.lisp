@@ -1,13 +1,22 @@
+(in-package :cl-jack)
 
-(in-package :jack)
+(defconstant +jack-port-is-input+ #x01)
+(defconstant +jack-port-is-output+ #x02)
+(defconstant +jack-port-is-physical+ #x04)
 
-(defvar *client* (client-open "simple" 0 (null-pointer)))
-(defvar *input-port* (port-register *client* "in"
-				    +default-audio-type+
-				    +port-is-input+ 0))
-(defvar *output-port* (port-register *client* "out"
-				     +default-audio-type+
-				     +port-is-output+ 0))
+(defconstant +max-frames+ 4294967295)
+(defconstant +load-init-limit+ 1024)
+
+(defconstant +jack-default-audio-type+ "32 bit float mono audio")
+(defconstant +jack-default-midi-type+ "8 bit raw midi")
+
+(defvar *client* (jack-client-open "simple" (null-pointer) (null-pointer)))
+(defvar *input-port* (jack-port-register *client* "in"
+				    +jack-default-audio-type+
+				    +jack-port-is-input+ 0))
+(defvar *output-port* (jack-port-register *client* "out"
+				     +jack-default-audio-type+
+				     +jack-port-is-output+ 0))
 
 (when (null-pointer-p *client*)
   (error "jack server not running?"))
@@ -15,12 +24,18 @@
 (defcallback process :int ((nframes :uint32) (arg :pointer))
   (declare (ignore arg)
 	   (optimize (speed 3)))
-  (let ((in (port-get-buffer *input-port* nframes))
-	(out (port-get-buffer *output-port* nframes)))
-    (iter (for i from 0 below nframes)
-	  (setf (mem-aref out :uint8 i) (mem-aref in :uint8 i))))
+  (let ((in (jack-port-get-buffer *input-port* nframes))
+	(out (jack-port-get-buffer *output-port* nframes)))
+    (foo in out nframes))
   0)
 
-(set-process-callback *client* (callback process) (null-pointer))
+(defun foo (in out nframes)
+  (iter (for i from 0 below nframes)
+        (setf (mem-aref out :float i) (bar (mem-aref in :float i)))))
 
-(activate *client*)
+(defun bar (in)
+  (* in 0.0))
+
+(jack-set-process-callback *client* (callback process) (null-pointer))
+
+(jack-activate *client*)

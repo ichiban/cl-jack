@@ -2,7 +2,8 @@
 
 (defpackage :cl-jack
   (:use :cl
-	:cffi)
+	:cffi
+        :iterate)
   (:export :*error-function*
 	   :*info-function*
 	   :jack-client))
