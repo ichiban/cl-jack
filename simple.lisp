@@ -41,21 +41,8 @@
 
 (defparameter *gain* -3dB)
 
-(defparameter *filter* (aplay-hack::combine (lambda (x)
-                                              (* x *gain*))
-                                            ;; (aplay-hack::make-biquad-lpf 10k 0.5)
-                                            ))
-#+nil
-(setf *filter*
-      (let ((st (make-stereo-limiter :limit -50dB
-                                     :release (round (* 100 44.1))
-                                     :attack (round (* 0 44.1))
-                                     :lookahead (* 10 44.1)))
-            (pregain 50dB))
-        (combine (lambda (x)
-                   (funcall st
-                            (* pregain x)
-                            (* pregain x))))))
+(defparameter *filter* (lambda (x)
+                         (* x *gain*)))
 
 (defparameter *rms* 0)
 
