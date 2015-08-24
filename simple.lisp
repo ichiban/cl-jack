@@ -31,11 +31,39 @@
 
 (defun foo (in out nframes)
   (iter (for i from 0 below nframes)
-        (setf (mem-aref out :float i) (bar (mem-aref in :float i)))))
+        (setf (mem-aref out :float i) (coerce (bar (mem-aref in :float i))
+                                              'short-float))))
+
+(defun make-thingy ()
+  (let ((i 0))
+    (lambda ()
+      (incf i 0.0001))))
+
+(defparameter *gain* -3dB)
+
+(defparameter *filter* (aplay-hack::combine (lambda (x)
+                                              (* x *gain*))
+                                            ;; (aplay-hack::make-biquad-lpf 10k 0.5)
+                                            ))
+#+nil
+(setf *filter*
+      (let ((st (make-stereo-limiter :limit -50dB
+                                     :release (round (* 100 44.1))
+                                     :attack (round (* 0 44.1))
+                                     :lookahead (* 10 44.1)))
+            (pregain 50dB))
+        (combine (lambda (x)
+                   (funcall st
+                            (* pregain x)
+                            (* pregain x))))))
+
+(defparameter *rms* 0)
 
 (defun bar (in)
-  (* in 0.0))
+  (setf *rms* (+ (* *rms* 0.9999)
+                 (* in in 0.0001)))
+  (* 1.0 (funcall *filter* in)))
 
-(jack-set-process-callback *client* (callback process) (null-pointer))
+(Jack-set-process-callback *client* (callback process) (null-pointer))
 
 (jack-activate *client*)
