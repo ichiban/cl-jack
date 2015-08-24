@@ -26,31 +26,26 @@
 	   (optimize (speed 3)))
   (let ((in (jack-port-get-buffer *input-port* nframes))
 	(out (jack-port-get-buffer *output-port* nframes)))
-    (foo in out nframes))
+    (iter (for i from 0 below nframes)
+        (setf (mem-aref out :float i)
+              (coerce (process-sample (mem-aref in :float i))
+                      'short-float))))
   0)
 
-(defun foo (in out nframes)
-  (iter (for i from 0 below nframes)
-        (setf (mem-aref out :float i) (coerce (bar (mem-aref in :float i))
-                                              'short-float))))
-
-(defun make-thingy ()
-  (let ((i 0))
-    (lambda ()
-      (incf i 0.0001))))
-
-(defparameter *gain* -3dB)
-
-(defparameter *filter* (lambda (x)
-                         (* x *gain*)))
+(defparameter *gain* 0.5)
 
 (defparameter *rms* 0)
 
-(defun bar (in)
+(defun process-sample (in)
   (setf *rms* (+ (* *rms* 0.9999)
                  (* in in 0.0001)))
-  (* 1.0 (funcall *filter* in)))
+  (* *gain* (funcall *filter* in)))
 
 (Jack-set-process-callback *client* (callback process) (null-pointer))
 
 (jack-activate *client*)
+
+
+(defun stop-simple ()
+  (jack-deactivate *client*)
+  (jack-client-close *client*))
