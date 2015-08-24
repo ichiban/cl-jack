@@ -2,8 +2,14 @@
 
 (defpackage :cl-jack
   (:use :cl
-	:cffi
-        :iterate)
-  (:export :*error-function*
-	   :*info-function*
-	   :jack-client))
+	:cffi)
+  (:export :jack-client-open
+           :jack-port-register
+           :jack-port-get-buffer
+           :jack-set-process-callback
+           :jack-activate
+           :jack-deactivate
+           :jack-client-close
+           :+jack-default-audio-type+
+           :+jack-port-is-output+
+           :+jack-port-is-input+))

@@ -1,14 +1,7 @@
-(in-package :cl-jack)
-
-(defconstant +jack-port-is-input+ #x01)
-(defconstant +jack-port-is-output+ #x02)
-(defconstant +jack-port-is-physical+ #x04)
-
-(defconstant +max-frames+ 4294967295)
-(defconstant +load-init-limit+ 1024)
-
-(defconstant +jack-default-audio-type+ "32 bit float mono audio")
-(defconstant +jack-default-midi-type+ "8 bit raw midi")
+(in-package :cl-user)
+(defpackage :cl-jack-user
+  (:use :cl-jack :cffi :iterate :cl))
+(in-package :cl-jack-user)
 
 (defvar *client* (jack-client-open "simple" (null-pointer) (null-pointer)))
 (defvar *input-port* (jack-port-register *client* "in"
@@ -39,12 +32,11 @@
 (defun process-sample (in)
   (setf *rms* (+ (* *rms* 0.9999)
                  (* in in 0.0001)))
-  (* *gain* (funcall *filter* in)))
+  (* *gain* in))
 
-(Jack-set-process-callback *client* (callback process) (null-pointer))
+(jack-set-process-callback *client* (callback process) (null-pointer))
 
 (jack-activate *client*)
-
 
 (defun stop-simple ()
   (jack-deactivate *client*)
