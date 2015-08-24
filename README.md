@@ -12,3 +12,9 @@ Try loading simple.lisp - it should create a simple through client visible using
 (defun process-sample (in)
    (* (incf *gain* (/ 441000.0))
       in))
+
+Note: bindings extracted by running swig.sh using swig compiled from:
+
+https://github.com/rick-monster/swig
+
+This may or may not work using swig main branch I haven't tested...
