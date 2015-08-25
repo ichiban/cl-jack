@@ -6,7 +6,7 @@
 %{
 (in-package :cl-jack)
 
-(load-foreign-library "/Library/Frameworks/Jackmp.framework/Jackmp")
+(load-foreign-library "/usr/local/lib/libjack.so")
 %}
 
-%include "/Library/Frameworks/Jackmp.framework/Headers/jack.h"
+%include "/home/rick/quicklisp/local-projects/cl-jack/jack.h"
