@@ -282,6 +282,11 @@
   (port :pointer)
   (port_name :string))
 
+(cffi:defcfun ("jack_port_rename" #.(swig-lispify "jack_port_rename" 'function)) :int
+  (client :pointer)
+  (port :pointer)
+  (port_name :string))
+
 (cffi:defcfun ("jack_port_set_alias" #.(swig-lispify "jack_port_set_alias" 'function)) :int
   (port :pointer)
   (alias :string))
