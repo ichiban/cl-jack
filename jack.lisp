@@ -233,7 +233,7 @@
 
 (cffi:defcfun ("jack_port_get_buffer" #.(swig-lispify "jack_port_get_buffer" 'function)) :pointer
   (port :pointer)
-  (arg1 :int))
+  (arg1 :uint32))
 
 (cffi:defcfun ("jack_port_uuid" #.(swig-lispify "jack_port_uuid" 'function)) :pointer
   (port :pointer))
@@ -352,7 +352,7 @@
 (cffi:defcfun ("jack_port_get_latency" #.(swig-lispify "jack_port_get_latency" 'function)) :pointer
   (port :pointer))
 
-(cffi:defcfun ("jack_port_get_total_latency" #.(swig-lispify "jack_port_get_total_latency" 'function)) :pointer
+(cffi:defcfun ("jack_port_get_total_latency" #.(swig-lispify "jack_port_get_total_latency" 'function)) :int
   (client :pointer)
   (port :pointer))
 
