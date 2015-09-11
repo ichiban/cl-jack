@@ -208,7 +208,7 @@
   (client :pointer)
   (nframes :pointer))
 
-(cffi:defcfun ("jack_get_sample_rate" #.(swig-lispify "jack_get_sample_rate" 'function)) :pointer
+(cffi:defcfun ("jack_get_sample_rate" #.(swig-lispify "jack_get_sample_rate" 'function)) :int
   (arg0 :pointer))
 
 (cffi:defcfun ("jack_get_buffer_size" #.(swig-lispify "jack_get_buffer_size" 'function)) :pointer
