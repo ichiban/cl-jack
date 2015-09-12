@@ -9,5 +9,6 @@
 (load-foreign-library "/usr/local/lib/libjack.so")
 %}
 
+%include "/home/rick/quicklisp/local-projects/cl-jack/types.h"
 %include "/home/rick/quicklisp/local-projects/cl-jack/jack.h"
 %include "/home/rick/quicklisp/local-projects/cl-jack/midiport.h"
