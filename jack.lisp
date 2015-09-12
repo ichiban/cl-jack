@@ -405,7 +405,7 @@
   (ptr :pointer))
 
 (cffi:defcstruct #.(swig-lispify "jack_midi_event_t" 'classname)
-	(#.(swig-lispify "time" 'slotname) jack-nframes)
+	(#.(swig-lispify "time" 'slotname) jack-nframes-t)
 	(#.(swig-lispify "size" 'slotname) size-t)
 	(#.(swig-lispify "buffer" 'slotname) jack-midi-data-t))
 

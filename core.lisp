@@ -14,12 +14,10 @@
 (cffi:defctype uint64-t :uint64)
 
 (cffi:defctype size-t uint32-t)
-(cffi:defctype jack-nframes uint32-t)
 (cffi:defctype jack-midi-data-t :uchar)
 
 (cffi:defctype jack-nframes-t uint32-t)
 (cffi:defctype jack-time-t uint64-t)
-
 
 (cffi:defctype jack-thread-callback :pointer)
 (cffi:defctype jack-thread-init-callback :pointer)
@@ -40,4 +38,6 @@
 (cffi:defctype jack-uuid-t :uint64)
 (cffi:defctype jack-port-type-id-t :uint64)
 
+
 (cffi:defctype jack-latency-callback-mode-t :pointer);;FIXME - probably borked
+(cffi:defctype jack-options-t :pointer)
