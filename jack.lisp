@@ -35,7 +35,7 @@
                       ((cl:lower-case-p c)
                        (helper (cl:cdr lst) 'lower (cl:cons (cl:char-upcase c) rest)))
                       ((cl:digit-char-p c)
-                       (helper (cl:cdr lst) 'digit
+                       (helper (cl:cdr lst) 'digit 
                                (cl:case last
                                  ((upper lower) (cl:list* c #\- rest))
                                  (cl:t (cl:cons c rest)))))
@@ -419,3 +419,41 @@
 
 (cffi:defcfun ("jack_free" #.(swig-lispify "jack_free" 'function)) :void
   (ptr :pointer))
+
+(cffi:defcstruct #.(swig-lispify "jack_midi_event_t" 'classname)
+	(#.(swig-lispify "time" 'slotname) :pointer)
+	(#.(swig-lispify "size" 'slotname) :pointer)
+	(#.(swig-lispify "buffer" 'slotname) :pointer))
+
+(cffi:defcfun ("jack_midi_get_event_count" #.(swig-lispify "jack_midi_get_event_count" 'function)) :pointer
+  (port_buffer :pointer))
+
+(cffi:defcfun ("jack_midi_event_get" #.(swig-lispify "jack_midi_event_get" 'function)) :int
+  (event :pointer)
+  (port_buffer :pointer)
+  (event_index :pointer))
+
+(cffi:defcfun ("jack_midi_clear_buffer" #.(swig-lispify "jack_midi_clear_buffer" 'function)) :void
+  (port_buffer :pointer))
+
+(cffi:defcfun ("jack_midi_reset_buffer" #.(swig-lispify "jack_midi_reset_buffer" 'function)) :void
+  (port_buffer :pointer))
+
+(cffi:defcfun ("jack_midi_max_event_size" #.(swig-lispify "jack_midi_max_event_size" 'function)) :pointer
+  (port_buffer :pointer))
+
+(cffi:defcfun ("jack_midi_event_reserve" #.(swig-lispify "jack_midi_event_reserve" 'function)) :pointer
+  (port_buffer :pointer)
+  (time :pointer)
+  (data_size :pointer))
+
+(cffi:defcfun ("jack_midi_event_write" #.(swig-lispify "jack_midi_event_write" 'function)) :int
+  (port_buffer :pointer)
+  (time :pointer)
+  (data :pointer)
+  (data_size :pointer))
+
+(cffi:defcfun ("jack_midi_get_lost_event_count" #.(swig-lispify "jack_midi_get_lost_event_count" 'function)) :pointer
+  (port_buffer :pointer))
+
+

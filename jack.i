@@ -10,3 +10,4 @@
 %}
 
 %include "/home/rick/quicklisp/local-projects/cl-jack/jack.h"
+%include "/home/rick/quicklisp/local-projects/cl-jack/midiport.h"
